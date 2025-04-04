@@ -13,7 +13,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create master --draft --title v7.4.4
+          gh release create ${{ github.ref_name }} --draft --title ${{ github.ref_name }}
 
   build-plugin:
     needs: ["create-release"]
@@ -36,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload v7.4.4 Rojo.rbxm
+          gh release upload ${{ github.ref_name }} Rojo.rbxm
 
       - name: Upload Plugin to Artifacts
         uses: actions/upload-artifact@v4
@@ -51,10 +51,25 @@ jobs:
       matrix:
         # https://doc.rust-lang.org/rustc/platform-support.html
         include:
+          - host: linux
+            os: ubuntu-20.04
+            target: x86_64-unknown-linux-gnu
+            label: linux-x86_64
+
           - host: windows
             os: windows-latest
             target: x86_64-pc-windows-msvc
             label: windows-x86_64
+
+          - host: macos
+            os: macos-latest
+            target: x86_64-apple-darwin
+            label: macos-x86_64
+
+          - host: macos
+            os: macos-latest
+            target: aarch64-apple-darwin
+            label: macos-aarch64
 
     name: Build (${{ matrix.target }})
     runs-on: ${{ matrix.os }}
@@ -85,7 +100,7 @@ jobs:
       - name: Generate Artifact Name
         shell: bash
         env:
-          TAG_NAME: v7.4.4
+          TAG_NAME: ${{ github.ref_name }}
         run: |
           echo "ARTIFACT_NAME=$BIN-${TAG_NAME#v}-${{ matrix.label }}.zip" >> "$GITHUB_ENV"
 
