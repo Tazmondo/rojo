@@ -13,7 +13,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v7.4.4 --draft --verify-tag --title v7.4.4
+          gh release create master --draft --title v7.4.4
 
   build-plugin:
     needs: ["create-release"]
