@@ -13,7 +13,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create 7.4.4 --draft --verify-tag --title 7.4.4
+          gh release create v7.4.4 --draft --verify-tag --title v7.4.4
 
   build-plugin:
     needs: ["create-release"]
@@ -36,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload 7.4.4 Rojo.rbxm
+          gh release upload v7.4.4 Rojo.rbxm
 
       - name: Upload Plugin to Artifacts
         uses: actions/upload-artifact@v4
@@ -100,7 +100,7 @@ jobs:
       - name: Generate Artifact Name
         shell: bash
         env:
-          TAG_NAME: 7.4.4
+          TAG_NAME: v7.4.4
         run: |
           echo "ARTIFACT_NAME=$BIN-${TAG_NAME#v}-${{ matrix.label }}.zip" >> "$GITHUB_ENV"
 
